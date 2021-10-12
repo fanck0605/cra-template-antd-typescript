@@ -34,6 +34,22 @@ CracoLessPlugin.overrideJestConfig = ({ context, jestConfig }) => {
   return jestConfig;
 };
 
+const packageDependencies = (packageName) =>
+  Object.keys(require(`${packageName}/package.json`).dependencies || {});
+
+const getAllPackageNames = (packageNames) => {
+  const allPackageNames = new Set(packageNames);
+  for (const packageName of packageNames) {
+    const dependencyNames = packageDependencies(packageName);
+    for (const e of getAllPackageNames(dependencyNames)) {
+      allPackageNames.add(e);
+    }
+  }
+  return allPackageNames;
+};
+
+const pathSeparatorPattern = '[/\\\\]';
+
 module.exports = {
   babel: {
     plugins: [
@@ -52,7 +68,7 @@ module.exports = {
       const transformIgnorePatterns = jestConfig.transformIgnorePatterns;
 
       const indexOfNodeModulesPattern = transformIgnorePatterns.findIndex((p) =>
-        p.includes('node_modules[/\\\\]')
+        p.includes(`node_modules${pathSeparatorPattern}`)
       );
       if (indexOfNodeModulesPattern === -1) {
         throw new Error(
@@ -60,7 +76,16 @@ module.exports = {
         );
       }
 
-      transformIgnorePatterns.splice(indexOfNodeModulesPattern, 1);
+      const packageNamesPattern = [...getAllPackageNames(['antd'])]
+        .map((packageName) => packageName.replace('/', pathSeparatorPattern))
+        .join('|');
+      const nodeModulesPattern =
+        transformIgnorePatterns[indexOfNodeModulesPattern];
+      transformIgnorePatterns[indexOfNodeModulesPattern] =
+        nodeModulesPattern.replace(
+          `node_modules${pathSeparatorPattern}`,
+          `node_modules${pathSeparatorPattern}(?!(${packageNamesPattern})${pathSeparatorPattern})`
+        );
 
       return jestConfig;
     },
