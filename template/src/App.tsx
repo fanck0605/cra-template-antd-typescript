@@ -1,23 +1,25 @@
 import React from 'react';
+import { Button } from 'antd';
+import { AntDesignOutlined } from '@ant-design/icons';
 import logo from './logo.svg';
-import './App.css';
+import styles from './App.module.less';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <div className={styles.app}>
+      <header className={styles.header}>
+        <img src={logo} className={styles.logo} alt="logo" />
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Button
+          href="https://ant.design/"
+          icon={<AntDesignOutlined />}
+          size="large"
+          type="primary"
         >
-          Learn React
-        </a>
+          Learn Ant Design
+        </Button>
       </header>
     </div>
   );
