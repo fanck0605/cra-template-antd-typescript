@@ -1,6 +1,6 @@
 {
   "name": "cra-template-antd-typescript",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,yml,css,less,sass,scss,md}\"",
     "lint": "eslint --fix \"**/*.{js,jsx,ts,tsx}\"",
