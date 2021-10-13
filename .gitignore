@@ -1,5 +1,10 @@
+.DS_Store
 .idea
 .vscode
+coverage
 node_modules
+npm-debug.log*
 package-lock.json
+yarn-debug.log*
+yarn-error.log*
 yarn.lock
