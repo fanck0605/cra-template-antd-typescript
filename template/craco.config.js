@@ -1,4 +1,4 @@
-const CracoLessPlugin = require('craco-less');
+const lessPlugin = require('craco-plugin-less');
 
 const packageDependencies = (packageName) =>
   Object.keys(require(`${packageName}/package.json`).dependencies || {});
@@ -58,7 +58,7 @@ module.exports = {
   },
   plugins: [
     {
-      plugin: CracoLessPlugin,
+      plugin: lessPlugin,
       options: {
         lessLoaderOptions: {
           lessOptions: {
