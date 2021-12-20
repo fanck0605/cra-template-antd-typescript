@@ -1,18 +1,4 @@
-const lessPlugin = require('craco-plugin-less');
-
-const packageDependencies = (packageName) =>
-  Object.keys(require(`${packageName}/package.json`).dependencies || {});
-
-const getAllPackageNames = (packageNames) => {
-  const allPackageNames = new Set(packageNames);
-  for (const packageName of packageNames) {
-    const dependencyNames = packageDependencies(packageName);
-    for (const e of getAllPackageNames(dependencyNames)) {
-      allPackageNames.add(e);
-    }
-  }
-  return allPackageNames;
-};
+const { default: lessPlugin } = require('craco-plugin-less');
 
 const pathSeparatorPattern = '[/\\\\]';
 
@@ -42,15 +28,12 @@ module.exports = {
         );
       }
 
-      const packageNamesPattern = [...getAllPackageNames(['antd'])]
-        .map((packageName) => packageName.replace('/', pathSeparatorPattern))
-        .join('|');
       const nodeModulesPattern =
         transformIgnorePatterns[indexOfNodeModulesPattern];
       transformIgnorePatterns[indexOfNodeModulesPattern] =
         nodeModulesPattern.replace(
           `node_modules${pathSeparatorPattern}`,
-          `node_modules${pathSeparatorPattern}(?!(${packageNamesPattern})${pathSeparatorPattern})`
+          `node_modules${pathSeparatorPattern}(?!(antd|@ant-design|rc-.+?|@babel/runtime)${pathSeparatorPattern})`
         );
 
       return jestConfig;
